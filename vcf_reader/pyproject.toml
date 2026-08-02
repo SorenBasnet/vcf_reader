@@ -1,0 +1,6 @@
+[project]
+name = "vcf-reader"
+version = "0.1.0"
+
+[project.scripts]
+vcf_reader = "vcf_reader.cli:main"

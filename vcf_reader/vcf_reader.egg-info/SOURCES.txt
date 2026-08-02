@@ -1,0 +1,8 @@
+pyproject.toml
+vcf_reader/__init__.py
+vcf_reader/cli.py
+vcf_reader.egg-info/PKG-INFO
+vcf_reader.egg-info/SOURCES.txt
+vcf_reader.egg-info/dependency_links.txt
+vcf_reader.egg-info/entry_points.txt
+vcf_reader.egg-info/top_level.txt
