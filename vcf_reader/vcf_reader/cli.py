@@ -11,6 +11,25 @@ def main():
             help="Show the manual"
             )
 
+    parser.add_argument(
+            "-f", "--file",
+            type=str,
+            help="Path to the input VCF file"
+            )
+
+    parser.add_argument(
+            "--proceed", "-p",
+            type=str,
+            help="Process with operating the file in the SLURM and output value in the server space"
+            )
+
+    parser.add_argument(
+            "--publish", "--pub",
+            type=str,
+            help="Publish the results"
+            # TODO : think about privacy, where to publish, what files to publish, etc
+            )
+
     args = parser.parse_args()
 
 
@@ -23,6 +42,8 @@ def main():
         Contact : basnetsoren01@gmail.com
 
               """)
+        parser.print_help()
+        sys.exit(0)
 
 
     elif args.man:
@@ -36,8 +57,9 @@ def main():
             --output    Shows output for the file
 
             """)
-
-
+    elif args.file:
+        print(f"Reading VCF file from:{args.file}")
+        # TODO : add logic here
 
 
 
