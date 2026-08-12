@@ -1,4 +1,6 @@
 import argparse
+import subprocess
+import sys 
 
 def main():
     parser = argparse.ArgumentParser(
@@ -59,8 +61,20 @@ def main():
             """)
     elif args.file:
         print(f"Reading VCF file from:{args.file}")
-        # TODO : add logic here
+        header(args.file)
 
+
+
+
+def header(vcf_file): 
+    result = subprocess.run(
+         ["bcftools", "view", "-h", vcf_file],
+        capture_output=True,
+        text=True,
+        check=True
+    )
+
+    print(result.stdout)
 
 
 if __name__ == "__main__":
