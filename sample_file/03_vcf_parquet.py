@@ -1,5 +1,7 @@
 import pandas as pd
 
+# tsv to parquet 
+
 input_file = "variants.tsv"
 output_file = "variants.parquet"
 
