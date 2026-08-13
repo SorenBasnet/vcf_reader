@@ -2,4 +2,5 @@
 /sample_file/JAS_N36.GATK.indel.vcf.gz
 /sample_file/JAS_N36.GATK.indel.vcf.gz.csi
 /sample_file/sample.vcf.gz
-
+/sample_file/variants.*
+/query_engine_sqlite3/variants_v2.*
