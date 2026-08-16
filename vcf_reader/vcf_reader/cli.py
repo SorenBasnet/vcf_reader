@@ -1,10 +1,13 @@
 import argparse
 import subprocess
-import sys 
+import sys
+from .sql import sql_shell
 
 def main():
     parser = argparse.ArgumentParser(
-            description="Command Line Interface for interacting with automated VCF reader pipeline"
+                      description="Command Line Interface for inter\
+                                   acting with automated VCF reader \
+                                   pipeline"
             )
 
     parser.add_argument(
@@ -22,7 +25,8 @@ def main():
     parser.add_argument(
             "--proceed", "-p",
             type=str,
-            help="Process with operating the file in the SLURM and output value in the server space"
+            help="Process with operating the file in the SLURM and \
+                  output value in the server space"
             )
 
     parser.add_argument(
@@ -32,10 +36,25 @@ def main():
             # TODO : think about privacy, where to publish, what files to publish, etc
             )
 
+
+    subparsers = parser.add_subparsers(dest="command")
+
+    #SQL command
+    subparsers.add_parser(
+            "sql",
+            help = "Enter interactive SQL mode"
+            )
+
     args = parser.parse_args()
+
+    if args.command == "sql":
+        sql_shell()
+    else:
+        parser.print_help()
 
 
     if len(vars(args)) == 1:
+
         print("""
         Welcome to vcf_reader pipelie v.0.1.0
 
@@ -43,7 +62,8 @@ def main():
 
         Contact : basnetsoren01@gmail.com
 
-              """)
+        """)
+
         parser.print_help()
         sys.exit(0)
 
@@ -59,14 +79,13 @@ def main():
             --output    Shows output for the file
 
             """)
+
     elif args.file:
         print(f"Reading VCF file from:{args.file}")
         header(args.file)
 
 
-
-
-def header(vcf_file): 
+def header(vcf_file):
     result = subprocess.run(
          ["bcftools", "view", "-h", vcf_file],
         capture_output=True,

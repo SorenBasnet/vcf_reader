@@ -1,6 +1,11 @@
 pyproject.toml
+tests/test_allele_frequency.py
+tests/test_cli.py
 vcf_reader/__init__.py
+vcf_reader/allele_frequency.py
 vcf_reader/cli.py
+vcf_reader/sql.py
+vcf_reader/summary.py
 vcf_reader.egg-info/PKG-INFO
 vcf_reader.egg-info/SOURCES.txt
 vcf_reader.egg-info/dependency_links.txt
