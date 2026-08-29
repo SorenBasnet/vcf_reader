@@ -1,2 +1,0 @@
-[console_scripts]
-vcf_reader = vcf_reader.cli:main

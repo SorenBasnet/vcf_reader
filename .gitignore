@@ -4,3 +4,5 @@
 /sample_file/sample.vcf.gz
 /sample_file/variants.*
 /query_engine_sqlite3/variants_v2.*
+/sample_file/*
+/cintern_platform.egg-info
