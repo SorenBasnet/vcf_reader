@@ -1,0 +1,43 @@
+000 (9715694.000.000) 2026-08-30 09:43:42 Job submitted from host: <128.105.68.112:9618?addrs=128.105.68.112-9618+[2607-f388-2200-100-eaeb-d3ff-fea3-4202]-9618&alias=ap2001.chtc.wisc.edu&noUDP&sock=schedd_7891_25eb>
+...
+040 (9715694.000.000) 2026-08-30 09:44:22 Started transferring input files
+	Transferring to host: <128.105.68.53:9618?addrs=128.105.68.53-9618+[2607-f388-2200-100-3680-dff-fe2e-8828]-9618&alias=e2483.chtc.wisc.edu&noUDP&sock=slot1_7_2929493_9530_111104>
+...
+040 (9715694.000.000) 2026-08-30 09:44:22 Finished transferring input files
+...
+001 (9715694.000.000) 2026-08-30 09:44:23 Job executing on host: <128.105.68.53:9618?addrs=128.105.68.53-9618+[2607-f388-2200-100-3680-dff-fe2e-8828]-9618&alias=e2483.chtc.wisc.edu&noUDP&sock=startd_12139_ec3c>
+	SlotName: slot1_7@e2483.chtc.wisc.edu
+	CondorScratchDir = "/var/lib/condor/execute/slot1/dir_2837018/scratch"
+	Cpus = 1
+	Disk = 10485760
+	GPUs = 0
+	IoHeavy = 0
+	Memory = 4096
+...
+006 (9715694.000.000) 2026-08-30 09:44:23 Image size of job updated: 88
+	0  -  MemoryUsage of job (MB)
+	0  -  ResidentSetSize of job (KB)
+...
+040 (9715694.000.000) 2026-08-30 09:44:23 Started transferring output files
+...
+040 (9715694.000.000) 2026-08-30 09:44:23 Finished transferring output files
+...
+005 (9715694.000.000) 2026-08-30 09:44:24 Job terminated.
+	(1) Normal termination (return value 127)
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	99  -  Run Bytes Sent By Job
+	63  -  Run Bytes Received By Job
+	99  -  Total Bytes Sent By Job
+	63  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :        0        1         1 
+	   Disk (KB)            :       30 10485760  10485760 
+	   GPUs                 :                           0 
+	   IoHeavy              :                           0 
+	   Memory (MB)          :        0     4096      4096 
+	   TimeExecute (s)      :        0                    
+	   TimeSlotBusy (s)     :        1                    
+...

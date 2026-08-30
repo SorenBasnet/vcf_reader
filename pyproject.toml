@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cintern-platform"
+version = "0.1.0"
+authors = [
+    { name="Basnet Soren", email="basnetsoren01@gmail.com" }
+]
+description = "HPC Genomic Research Platform"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = []
+
+[project.scripts]
+genome = "cintern.cli.main:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["cintern*"]
