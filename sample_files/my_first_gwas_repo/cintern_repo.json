@@ -1,0 +1,16 @@
+{
+    "repository_name": "my_first_gwas_repo",
+    "title": "Height GWAS Cohort 1",
+    "description": "GWAS results platform deployment",
+    "author": "Basnet Soren",
+    "created": "2026-08-30 19:22:07",
+    "phenotype": {
+        "trait": "Standing Height",
+        "sample_size": 1842
+    },
+    "files": {
+        "gwas_results": "test_gwas.tsv",
+        "manifest": "cintern_repo.json"
+    },
+    "visibility": "private"
+}

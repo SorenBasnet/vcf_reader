@@ -1,0 +1,31 @@
+
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <title>Genomic Dataset Viewer</title>
+            <style>
+                body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; background-color: #0d1117; color: #c9d1d9; }
+                .header { background-color: #161b22; border-bottom: 1px solid #30363d; padding: 16px 32px; }
+                .container { padding: 32px; max-width: 1200px; margin: 0 auto; }
+                .card { background: #161b22; border: 1px solid #30363d; border-radius: 6px; padding: 24px; margin-top: 16px; }
+                .tag { background: #238636; color: #fff; padding: 4px 8px; border-radius: 12px; font-size: 12px; }
+            </style>
+        </head>
+        <body>
+            <div class="header">
+                <h2>cintern / <span id="repo-title">GWAS Result Repository</span></h2>
+                <span class="tag">Published</span>
+            </div>
+            <div class="container">
+                <div class="card">
+                    <h3>GWAS Manhattan & QQ Interactive Viewer</h3>
+                    <p>Interactive plots generated automatically by <code>cintern publish</code>.</p>
+                    <div id="plot-container" style="height: 400px; border: 1px dashed #30363d; display: flex; align-items: center; justify-content: center;">
+                        <em>[ Manhattan Plot View Engine Ready ]</em>
+                    </div>
+                </div>
+            </div>
+        </body>
+        </html>
+    

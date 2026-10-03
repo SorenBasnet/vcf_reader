@@ -1,0 +1,11 @@
+universe = vanilla
+executable = vcf_af_job.sh
+output = ./logs/vcf_af_job_$(Cluster).out
+error = ./logs/vcf_af_job_$(Cluster).err
+log = ./logs/vcf_af_job_$(Cluster).log
+
+request_cpus = 1
+request_memory = 4GB
+request_disk = 10GB
+
+queue

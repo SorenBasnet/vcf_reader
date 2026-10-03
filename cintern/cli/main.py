@@ -7,38 +7,21 @@ import json
 import os
 import re
 import sys
-from pathlib import Path
-
-from cintern.workspace import (
-    WorkspaceError,
-    commit_path,
-    config_value,
-    create_local_repository,
-    current_commit,
-    find_workspace,
-    index_files,
-    load_config,
-    make_commit,
-    normalized_files,
-    read_head,
-    read_json,
-    repository_state,
-    save_config_value,
-    stage_file,
-    stage_remove,
-    working_tree_changes,
-    write_json,
-)
+from cintern.vcf.reader import get_vcf_header
+from cintern.vcf.samples import get_samples
+from cintern.vcf.query import query_region
+from cintern.vcf.stats import calc_allele_freq
+from cintern.hpc.slurm import generate_slurm_script, submit_slurm_job
+from cintern.hpc.htcondor import generate_condor_submit, submit_condor_job
+from cintern.publish.manifest import create_gwas_repository
+from cintern.publish.report import generate_web_report
+from cintern.mock_gwas.mock import generate_mock_gwas
 
 
-def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(
-        prog="vcfr",
-        description="Version and transfer research data repositories.",
-        epilog="Configure author details with `vcfr config user.email you@lab.edu --global`.",
-    )
-    parser.add_argument("--version", action="version", version="vcfr 0.2.0")
-    commands = parser.add_subparsers(dest="command", required=True)
+def main():
+
+    parser = argparse.ArgumentParser(prog="genome", description="C-Intern Platform v0.0.1")
+    subparsers = parser.add_subparsers(dest = "subcommand", required = True)
 
     init = commands.add_parser("init", help="Initialize a local research repository")
     init.add_argument("directory", nargs="?", default=".")
@@ -76,11 +59,36 @@ def build_parser() -> argparse.ArgumentParser:
     clone.add_argument("--summary-only", action="store_true", help="Fetch the manifest without large data files")
     _add_transfer_options(clone)
 
-    remote = commands.add_parser("remote", help="Manage the S3 remote for this repository")
-    remote_commands = remote.add_subparsers(dest="remote_command", required=True)
-    remote_add = remote_commands.add_parser("add", help="Set a remote URL")
-    remote_add.add_argument("name", choices=["origin"])
-    remote_add.add_argument("url")
+    # --- HPC SUBCOMMANDS ---
+    hpc_parser = subparsers.add_parser("hpc", help="Submit platform workloads to HPC schedulers")
+    hpc_subparsers = hpc_parser.add_subparsers(dest="hpc_command", required=True)
+
+    # genome hpc submit --scheduler slurm --job-name my_stats --cmd "genome vcf stats sample.vcf.gz -o out.vcf.gz"
+    submit_p = hpc_subparsers.add_parser("submit", help="Submit a job to SLURM or HTCondor")
+    submit_p.add_argument("--scheduler", choices=["slurm", "condor"], default="slurm", help="HPC Scheduler type")
+    submit_p.add_argument("--job-name", required=True, help="Name for the HPC job")
+    submit_p.add_argument("--cmd", required=True, help="Command string to run on worker node")
+    submit_p.add_argument("--cpus", type=int, default=4, help="CPUs to request")
+    submit_p.add_argument("--mem", type=int, default=16, help="RAM in GB to request")
+
+    publish_p = subparsers.add_parser("publish", help="Publish GWAS analysis into a web repository")
+    publish_p.add_argument("--dir", required=True, help="Target repository directory")
+    publish_p.add_argument("--title", required=True, help="Dataset Title")
+    publish_p.add_argument("--author", required=True, help="Author Name")
+    publish_p.add_argument("--gwas", required=True, help="Path to GWAS output file")
+    publish_p.add_argument("--trait", required=True, help="Trait analyzed")
+    publish_p.add_argument("--n-samples", type=int, required=True, help="Sample size")
+
+    # Subcommand parser for GWAS
+    gwas_parser = subparsers.add_parser("gwas", help="GWAS analysis and utilities")
+    gwas_subparsers = gwas_parser.add_subparsers(dest="gwas_command", required=True)
+
+    mock_p = gwas_subparsers.add_parser("mock", help="Generate mock summary stats for testing")
+    mock_p.add_argument("-o", "--output", default="mock_gwas.tsv", help="Output file path")
+    mock_p.add_argument("-n", "--num-variants", type=int, default=5000, help="Number of variants")
+
+
+    args = parser.parse_args()
 
     add = commands.add_parser("add", help="Stage files for the next snapshot")
     add.add_argument("paths", nargs="+")
@@ -256,6 +264,52 @@ def _clone(args) -> None:
     mode = "summary only" if args.summary_only else "full data"
     print(f"Cloned {metadata.get('name', name)} ({mode}) into {target}")
 
+    # Route HPC
+    elif args.subcommand == "hpc":
+        if args.hpc_command == "submit":
+            if args.scheduler == "slurm":
+                script = generate_slurm_script(
+                    job_name=args.job_name,
+                    command=args.cmd,
+                    cpus=args.cpus,
+                    mem_gb=args.mem
+                )
+                print(f"Generated SLURM script: {script}")
+                submit_slurm_job(script)
+            elif args.scheduler == "condor":
+                sub_file = generate_condor_submit(
+                    job_name=args.job_name,
+                    command=args.cmd,
+                    cpus=args.cpus,
+                    mem_gb=args.mem
+                )
+                print(f"Generated HTCondor submit file: {sub_file}")
+                submit_condor_job(sub_file)
+
+    elif args.subcommand == "publish": 
+        manifest = create_gwas_repository(
+                repo_dir = args.dir, 
+                title = args.title, 
+                description = "GWAS results platform deployment", 
+                author = args.author, 
+                gwas_file = args.gwas,
+                trait = args.trait, 
+                sample_size = args.n_samples
+                )
+
+        report_file = generate_web_report(args.dir, args.gwas)
+   
+        print(f"Repository initialized successfully at: {args.dir}")
+        print(f"Manifest written to: {args.dir}/cintern_repo.json")
+        print(f"Web viewer created: {report_file}")
+
+    elif args.subcommand == "gwas":
+        if args.gwas_command == "mock":
+            out = generate_mock_gwas(args.output, args.num_variants)
+            print(f"Generated test GWAS summary stats: {out}")
+
+if __name__ == "__main__":
+    main()
 
 def _remote_add(args) -> None:
     root = find_workspace()
