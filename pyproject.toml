@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cintern-platform"
+version = "0.2.0"
+authors = [
+    { name="Basnet Soren", email="basnetsoren01@gmail.com" }
+]
+description = "HPC Genomic Research Platform"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "boto3>=1.42.0,<2.0",
+    "pathspec>=0.12,<2.0",
+    "pysam>=0.23,<1.0",
+]
+
+[project.scripts]
+vcfr = "cintern.cli.main:main"
+# Compatibility entry point for existing installs; new documentation uses vcfr.
+genome = "cintern.cli.main:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["cintern*"]

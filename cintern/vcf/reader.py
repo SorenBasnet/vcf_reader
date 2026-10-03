@@ -22,8 +22,8 @@ def get_vcf_info(vcf_file: str) -> dict:
 
 
 def open_variant_file(path: str | Path) -> pysam.VariantFile:
-
     path = Path(path)
+
 
     if not path.exists():
         raise FileNotFoundError(f"File does not exist in file path : {path}")
@@ -39,17 +39,14 @@ def open_variant_file(path: str | Path) -> pysam.VariantFile:
 
 
 
-
-
 def test_open_variant_file(sample_vcf):
 
     with open_variant_file(sample_vcf) as variant_file:
         assert variant_file is not None
 
 
-if __name__=="__main__":
-    test_open_variant_file("/Users/sorenbasnet/Documents/Github/vcf_reader/sample_file/JAS_N36.GATK.indel.vcf.gz")
-
+#if __name__=="__main__":
+#    test_open_variant_file("/Users/sorenbasnet/Documents/Github/vcf_reader/sample_file/JAS_N36.GATK.indel.vcf.gz")
 
 
 
