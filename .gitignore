@@ -6,3 +6,10 @@
 /query_engine_sqlite3/variants_v2.*
 /sample_file/*
 /cintern_platform.egg-info
+.venv/
+__pycache__/
+*.py[cod]
+.vcfr/
+.DS_Store
+dist/
+build/
